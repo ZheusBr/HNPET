@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Cliente</title>
+
+    <!-- Firebase App -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <!-- Configuração do Firebase -->
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyAuXPIgos3VyF-J1F03BuAODUNxqTc9cA8",
+        authDomain: "teste-pet-shop.firebaseapp.com",
+        projectId: "teste-pet-shop",
+        appId: "1:328395881983:web:df8eb4e3364f2018cefbca"
+      };
+       firebase.initializeApp(firebaseConfig);
+
+  // Proteção da página
+  firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  });
+</script>
+  </head>
+  <body>
+    <h1>Cadastro de Cliente</h1>
+
+    <form onsubmit="salvarCadastro(event)">
+      <label>Nome:</label><br />
+      <input type="text" id="nome" required /><br />
+      <label>Email:</label><br />
+      <input type="email" id="emailCliente" required /><br />
+      <label>Telefone:</label><br />
+      <input type="tel" id="telefone" required /><br /><br />
+      <button type="submit">Salvar</button>
+    </form>
+
+    <p id="mensagem" style="color: green;"></p>
+
+    <script>
+      // Proteção: só entra se estiver logado
+      firebase.auth().onAuthStateChanged((user) => {
+        if (!user) {
+          window.location.href = "login.html";
+        }
+      });
+
+      // Firestore
+      const db = firebase.firestore();
+
+      function salvarCadastro(e) {
+        e.preventDefault();
+        const nome = document.getElementById("nome").value;
+        const email = document.getElementById("emailCliente").value;
+        const telefone = document.getElementById("telefone").value;
+
+        db.collection("clientes")
+          .add({
+            nome: nome,
+            email: email,
+            telefone: telefone,
+            criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+          })
+          .then(() => {
+            document.getElementById("mensagem").innerText = `Cliente ${nome} cadastrado com sucesso!`;
+            document.querySelector("form").reset();
+          })
+          .catch((error) => {
+  console.error("Erro ao salvar:", error); // ← mostra erro no console
+  document.getElementById("mensagem").innerText = "Erro ao cadastrar cliente.";
+});
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadastro</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+</head>
+<body>
+  <h1>Cadastro</h1>
+  <form onsubmit="cadastrar(event)">
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="senha" placeholder="Senha" required><br>
+    <button type="submit">Cadastrar</button>
+  </form>
+  <p id="mensagem" style="color: red;"></p>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuXPIgos3VyF-J1F03BuAODUNxqTc9cA8",
+      authDomain: "teste-pet-shop.firebaseapp.com",
+      projectId: "teste-pet-shop",
+      appId: "1:328395881983:web:df8eb4e3364f2018cefbca"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function cadastrar(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+
+      firebase.auth().createUserWithEmailAndPassword(email, senha)
+        .then(() => {
+          document.getElementById("mensagem").innerText = "Usuário cadastrado com sucesso!";
+        })
+        .catch((error) => {
+          document.getElementById("mensagem").innerText = "Erro: " + error.message;
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Agenda - Área Restrita</title>
+</head>
+<body>
+  <h1>Bem-vindo à Agenda</h1>
+  <p>Só quem está logado pode ver esta página.</p>
+
+  <button onclick="logout()">Sair</button>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuXPIgos3VyF-J1F03BuAODUNxqTc9cA8",
+      authDomain: "teste-pet-shop.firebaseapp.com",
+      projectId: "teste-pet-shop",
+      appId: "1:328395881983:web:df8eb4e3364f2018cefbca"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+</body>
+</html>
